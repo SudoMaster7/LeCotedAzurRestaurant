@@ -1,0 +1,1192 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>La Côte d'Azur — Restaurant de Prestige · Nice</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Montserrat:wght@200;300;400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #C9A84C;
+    --gold-light: #E8D5A3;
+    --gold-dark: #8B6914;
+    --cream: #F9F4EC;
+    --deep: #0D0A06;
+    --navy: #0B1A2E;
+    --azure: #0066CC;
+    --azure-light: #4A9EE0;
+    --terracotta: #C4612A;
+    --sage: #7A9E6E;
+    --burgundy: #6B1E2E;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; font-size: 16px; }
+
+  body {
+    background: var(--deep);
+    color: var(--cream);
+    font-family: 'Cormorant Garamond', serif;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* ── CUSTOM CURSOR ── */
+  .cursor {
+    position: fixed; width: 12px; height: 12px;
+    background: var(--gold); border-radius: 50%;
+    pointer-events: none; z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s, width 0.3s, height 0.3s, opacity 0.3s;
+    mix-blend-mode: difference;
+  }
+  .cursor-ring {
+    position: fixed; width: 40px; height: 40px;
+    border: 1px solid var(--gold-light); border-radius: 50%;
+    pointer-events: none; z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: transform 0.15s ease-out, width 0.3s, height 0.3s;
+    opacity: 0.5;
+  }
+
+  /* ── STARS CANVAS ── */
+  #stars-canvas {
+    position: fixed; top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none; z-index: 0;
+    opacity: 0.4;
+  }
+
+  /* ── HERO ── */
+  #hero {
+    position: relative; min-height: 100vh;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    overflow: hidden;
+    background: radial-gradient(ellipse at 50% 60%, #1a2a4a 0%, #0D0A06 70%);
+  }
+
+  .hero-bg-gradient {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse at 30% 50%, rgba(0,102,204,0.15) 0%, transparent 60%),
+      radial-gradient(ellipse at 70% 30%, rgba(201,168,76,0.1) 0%, transparent 50%);
+    z-index: 1;
+  }
+
+  /* Animated sea wave SVG */
+  .sea-wave {
+    position: absolute; bottom: 0; left: 0; width: 100%; z-index: 2;
+    opacity: 0.25;
+  }
+  .sea-wave path { animation: wave-anim 8s ease-in-out infinite; }
+  .sea-wave path:nth-child(2) { animation-delay: -3s; opacity: 0.5; }
+  .sea-wave path:nth-child(3) { animation-delay: -6s; opacity: 0.3; }
+  @keyframes wave-anim {
+    0%, 100% { d: path("M0,60 C200,20 400,80 600,50 C800,20 1000,70 1200,45 C1400,20 1600,65 1920,40 L1920,120 L0,120 Z"); }
+    50% { d: path("M0,80 C200,50 400,30 600,70 C800,100 1000,40 1200,65 C1400,90 1600,35 1920,60 L1920,120 L0,120 Z"); }
+  }
+
+  .hero-content {
+    position: relative; z-index: 5;
+    text-align: center; padding: 2rem;
+  }
+
+  .hero-eyebrow {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 200; font-size: 0.75rem;
+    letter-spacing: 0.5em; text-transform: uppercase;
+    color: var(--gold-light); margin-bottom: 1.5rem;
+    animation: fadeInUp 1s ease 0.3s both;
+  }
+
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3.5rem, 10vw, 9rem);
+    font-weight: 900; line-height: 0.9;
+    color: var(--cream);
+    animation: fadeInUp 1s ease 0.5s both;
+  }
+  .hero-title em {
+    font-style: italic; color: var(--gold);
+    display: block; font-size: 0.85em;
+  }
+
+  .hero-divider {
+    width: 200px; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    margin: 2rem auto;
+    animation: expandWidth 1.5s ease 1s both;
+  }
+  @keyframes expandWidth { from { width: 0; opacity: 0; } to { width: 200px; opacity: 1; } }
+
+  .hero-subtitle {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1rem, 2.5vw, 1.4rem);
+    font-style: italic; color: var(--gold-light);
+    font-weight: 300; letter-spacing: 0.1em;
+    animation: fadeInUp 1s ease 0.9s both;
+  }
+
+  .hero-location {
+    margin-top: 2.5rem;
+    display: flex; align-items: center; justify-content: center; gap: 0.75rem;
+    animation: fadeInUp 1s ease 1.1s both;
+  }
+  .hero-location svg { color: var(--gold); width: 18px; height: 18px; }
+  .hero-location span {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 300; font-size: 0.8rem;
+    letter-spacing: 0.3em; text-transform: uppercase;
+    color: var(--gold-light);
+  }
+
+  .scroll-hint {
+    position: absolute; bottom: 2.5rem; left: 50%; transform: translateX(-50%);
+    z-index: 5; display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+    animation: fadeIn 1s ease 2s both;
+    font-family: 'Montserrat', sans-serif; font-size: 0.65rem;
+    letter-spacing: 0.35em; text-transform: uppercase; color: var(--gold-light);
+  }
+  .scroll-hint::before {
+    content: ''; display: block; width: 1px; height: 50px;
+    background: linear-gradient(180deg, transparent, var(--gold));
+    animation: scrollLine 2s ease-in-out infinite;
+  }
+  @keyframes scrollLine { 0%,100%{opacity:0.3;transform:scaleY(0.5);}50%{opacity:1;transform:scaleY(1);} }
+
+  /* ── FLOATING PLATES 3D ── */
+  .plates-showcase {
+    position: absolute; inset: 0; z-index: 3; pointer-events: none;
+    overflow: hidden;
+  }
+  .plate-3d {
+    position: absolute; width: 180px; height: 180px;
+    animation: float3d 8s ease-in-out infinite;
+  }
+  .plate-3d:nth-child(1) { top: 10%; left: 5%; animation-delay: 0s; }
+  .plate-3d:nth-child(2) { top: 15%; right: 8%; animation-delay: -2.5s; width: 140px; height: 140px; }
+  .plate-3d:nth-child(3) { bottom: 20%; left: 10%; animation-delay: -5s; width: 120px; height: 120px; }
+  .plate-3d:nth-child(4) { bottom: 25%; right: 5%; animation-delay: -1.5s; width: 160px; height: 160px; }
+
+  @keyframes float3d {
+    0%,100% { transform: translateY(0) rotate3d(1,1,0,15deg) scale(1); filter: drop-shadow(0 20px 40px rgba(201,168,76,0.3)); }
+    33% { transform: translateY(-20px) rotate3d(1,-1,0,20deg) scale(1.05); filter: drop-shadow(0 40px 60px rgba(0,102,204,0.2)); }
+    66% { transform: translateY(10px) rotate3d(-1,1,0,10deg) scale(0.95); filter: drop-shadow(0 10px 30px rgba(201,168,76,0.4)); }
+  }
+
+  .plate-svg { width: 100%; height: 100%; }
+
+  /* ── PLATE IMAGES ── */
+  .plate-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter: drop-shadow(0 15px 30px rgba(201,168,76,0.25));
+    transition: all 0.3s ease;
+  }
+  
+  .plate-3d:hover .plate-img {
+    filter: drop-shadow(0 20px 45px rgba(201,168,76,0.4));
+  }
+
+  .about-dish-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter: drop-shadow(0 20px 40px rgba(0,0,0,0.3));
+  }
+
+  /* ── SECTIONS COMMON ── */
+  section {
+    position: relative; z-index: 10;
+    padding: 6rem 2rem;
+  }
+
+  .section-label {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 300; font-size: 0.65rem;
+    letter-spacing: 0.5em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 1rem;
+    display: flex; align-items: center; gap: 1rem;
+  }
+  .section-label::before, .section-label::after {
+    content: ''; flex: 1; max-width: 60px; height: 1px;
+    background: var(--gold-dark);
+  }
+  .section-label::before { max-width: 30px; }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.2rem, 5vw, 4rem);
+    font-weight: 700; line-height: 1.1;
+    margin-bottom: 1.5rem;
+  }
+
+  /* ── ABOUT ── */
+  #about {
+    background: linear-gradient(180deg, var(--deep) 0%, #0f1a2e 100%);
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 4rem; max-width: 1300px; margin: 0 auto;
+    align-items: center;
+  }
+  @media(max-width:900px){ #about { grid-template-columns: 1fr; } }
+
+  .about-visual {
+    position: relative; height: 500px;
+  }
+
+  /* Animated plate scene */
+  .scene-3d {
+    width: 100%; height: 100%;
+    perspective: 1000px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .scene-inner {
+    width: 340px; height: 340px;
+    transform-style: preserve-3d;
+    animation: rotatePlate 12s linear infinite;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  @keyframes rotatePlate {
+    from { transform: rotateY(0deg) rotateX(15deg); }
+    to { transform: rotateY(360deg) rotateX(15deg); }
+  }
+
+  .about-text p {
+    font-size: 1.15rem; line-height: 1.9; color: var(--gold-light);
+    margin-bottom: 1.5rem; font-weight: 300;
+  }
+  .about-text .quote {
+    font-style: italic; font-size: 1.4rem;
+    color: var(--gold); border-left: 2px solid var(--gold);
+    padding-left: 1.5rem; margin: 2rem 0;
+    line-height: 1.6;
+  }
+
+  .chef-signature {
+    display: flex; align-items: center; gap: 1rem; margin-top: 2rem;
+  }
+  .chef-avatar {
+    width: 60px; height: 60px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--gold-dark), var(--gold));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.5rem;
+    box-shadow: 0 0 30px rgba(201,168,76,0.4);
+  }
+  .chef-info span:first-child {
+    display: block; font-family: 'Playfair Display', serif;
+    font-size: 1.1rem; color: var(--cream);
+  }
+  .chef-info span:last-child {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.65rem; letter-spacing: 0.25em;
+    text-transform: uppercase; color: var(--gold);
+  }
+
+  /* ── MENU ── */
+  #menu {
+    background: linear-gradient(180deg, #0f1a2e 0%, #12100c 100%);
+    max-width: 100%; padding: 6rem 0;
+  }
+  .menu-inner { max-width: 1300px; margin: 0 auto; padding: 0 2rem; }
+
+  .menu-header { text-align: center; margin-bottom: 4rem; }
+
+  /* Category tabs */
+  .menu-tabs {
+    display: flex; gap: 0; flex-wrap: wrap; justify-content: center;
+    margin-bottom: 4rem; border: 1px solid rgba(201,168,76,0.2);
+    border-radius: 4px; overflow: hidden; max-width: 700px; margin: 0 auto 4rem;
+  }
+  .tab-btn {
+    flex: 1; min-width: 120px; padding: 1rem 1.5rem;
+    background: transparent; border: none; cursor: pointer;
+    font-family: 'Montserrat', sans-serif; font-size: 0.65rem;
+    letter-spacing: 0.3em; text-transform: uppercase;
+    color: var(--gold-light); transition: all 0.4s;
+    position: relative; overflow: hidden;
+  }
+  .tab-btn::before {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(135deg, var(--gold-dark), var(--gold));
+    opacity: 0; transition: opacity 0.4s;
+    z-index: 0;
+  }
+  .tab-btn:hover::before, .tab-btn.active::before { opacity: 1; }
+  .tab-btn span { position: relative; z-index: 1; }
+  .tab-btn:hover, .tab-btn.active { color: var(--deep); }
+
+  /* Menu grid */
+  .menu-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+    gap: 2px;
+  }
+
+  .menu-card {
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(201,168,76,0.1);
+    padding: 2.5rem;
+    cursor: pointer;
+    transition: all 0.5s cubic-bezier(0.25,0.46,0.45,0.94);
+    position: relative; overflow: hidden;
+    display: none;
+  }
+  .menu-card.visible { display: block; }
+  .menu-card::before {
+    content: ''; position: absolute;
+    top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    transform: scaleX(0); transition: transform 0.5s;
+  }
+  .menu-card:hover { background: rgba(201,168,76,0.05); transform: translateY(-4px); }
+  .menu-card:hover::before { transform: scaleX(1); }
+
+  .card-food-visual {
+    width: 100%; height: 200px;
+    margin-bottom: 1.5rem; position: relative;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 2px; overflow: hidden;
+  }
+
+  /* Images in menu cards */
+  .card-food-visual img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    filter: drop-shadow(0 15px 30px rgba(201,168,76,0.25));
+    transition: all 0.3s ease;
+  }
+  .menu-card:hover .card-food-visual img {
+    filter: drop-shadow(0 20px 45px rgba(201,168,76,0.4));
+    transform: scale(1.05);
+  }
+
+  /* Animated food illustrations */
+  .food-anim {
+    width: 160px; height: 160px;
+    animation: foodFloat 4s ease-in-out infinite;
+    filter: drop-shadow(0 20px 40px rgba(201,168,76,0.3));
+  }
+  .menu-card:hover .food-anim {
+    animation: foodFloatFast 2s ease-in-out infinite;
+  }
+  @keyframes foodFloat {
+    0%,100% { transform: translateY(0) scale(1); }
+    50% { transform: translateY(-12px) scale(1.04); }
+  }
+  @keyframes foodFloatFast {
+    0%,100% { transform: translateY(0) scale(1.05) rotate(-2deg); }
+    50% { transform: translateY(-16px) scale(1.1) rotate(2deg); }
+  }
+
+  .card-category {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.6rem; letter-spacing: 0.35em;
+    text-transform: uppercase; color: var(--gold);
+    margin-bottom: 0.75rem;
+  }
+  .card-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem; font-weight: 700;
+    color: var(--cream); margin-bottom: 0.75rem;
+    line-height: 1.2;
+  }
+  .card-desc {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.95rem; color: rgba(249,244,236,0.6);
+    line-height: 1.7; margin-bottom: 1.5rem;
+    font-style: italic;
+  }
+  .card-footer {
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .card-price {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem; font-weight: 400; color: var(--gold);
+  }
+  .card-badge {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.55rem; letter-spacing: 0.2em;
+    text-transform: uppercase; padding: 0.4rem 0.8rem;
+    border: 1px solid rgba(201,168,76,0.4);
+    color: var(--gold-light); border-radius: 2px;
+  }
+
+  /* Allergen dots */
+  .allergen-dots { display: flex; gap: 0.5rem; margin-top: 1rem; }
+  .allergen-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--gold-dark); opacity: 0.6;
+    cursor: help; transition: opacity 0.3s;
+  }
+  .allergen-dot:hover { opacity: 1; }
+  .allergen-dot.gluten { background: #c4a04a; }
+  .allergen-dot.shellfish { background: #c4612a; }
+  .allergen-dot.dairy { background: #a0bcd0; }
+  .allergen-dot.nuts { background: #8B6914; }
+
+  /* ── EXPERIENCE ── */
+  #experience {
+    background: linear-gradient(135deg, #0B1A2E 0%, #0D0A06 100%);
+    padding: 8rem 2rem;
+  }
+  .experience-inner { max-width: 1300px; margin: 0 auto; }
+
+  .experience-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 1px; margin-top: 4rem;
+    background: rgba(201,168,76,0.1);
+  }
+  @media(max-width:800px){ .experience-grid { grid-template-columns: 1fr; } }
+
+  .exp-cell {
+    background: var(--deep); padding: 3rem 2.5rem;
+    text-align: center; position: relative; overflow: hidden;
+    transition: all 0.5s;
+  }
+  .exp-cell:hover { background: rgba(201,168,76,0.05); }
+
+  .exp-icon {
+    font-size: 3rem; margin-bottom: 1.5rem;
+    display: block; animation: iconBob 3s ease-in-out infinite;
+  }
+  .exp-cell:nth-child(2) .exp-icon { animation-delay: -1s; }
+  .exp-cell:nth-child(3) .exp-icon { animation-delay: -2s; }
+  @keyframes iconBob {
+    0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}
+  }
+  .exp-number {
+    font-family: 'Playfair Display', serif;
+    font-size: 4rem; font-weight: 900;
+    color: var(--gold); line-height: 1;
+    margin-bottom: 0.5rem;
+  }
+  .exp-label {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.65rem; letter-spacing: 0.3em;
+    text-transform: uppercase; color: var(--gold-light);
+    margin-bottom: 1rem;
+  }
+  .exp-desc {
+    font-size: 0.95rem; color: rgba(249,244,236,0.5);
+    line-height: 1.7; font-style: italic;
+  }
+
+  /* ── MAP / LOCATION ── */
+  #location {
+    background: #12100c; padding: 6rem 2rem;
+  }
+  .location-inner {
+    max-width: 1300px; margin: 0 auto;
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 4rem; align-items: start;
+  }
+  @media(max-width:900px){ .location-inner { grid-template-columns: 1fr; } }
+
+  .location-info h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem; margin-bottom: 2rem; color: var(--cream);
+  }
+  .info-line {
+    display: flex; gap: 1.5rem; margin-bottom: 1.5rem;
+    align-items: flex-start;
+  }
+  .info-line .icon { font-size: 1.2rem; margin-top: 0.1rem; }
+  .info-line .content span:first-child {
+    display: block; font-family: 'Montserrat', sans-serif;
+    font-size: 0.65rem; letter-spacing: 0.25em;
+    text-transform: uppercase; color: var(--gold);
+    margin-bottom: 0.25rem;
+  }
+  .info-line .content span:last-child {
+    font-size: 1rem; color: var(--gold-light);
+    line-height: 1.6;
+  }
+
+  .reservation-cta {
+    margin-top: 3rem;
+    display: inline-block; padding: 1.2rem 3rem;
+    border: 1px solid var(--gold);
+    background: transparent; color: var(--gold);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.7rem; letter-spacing: 0.4em;
+    text-transform: uppercase; text-decoration: none;
+    cursor: pointer; transition: all 0.4s;
+    position: relative; overflow: hidden;
+  }
+  .reservation-cta::before {
+    content: ''; position: absolute; inset: 0;
+    background: var(--gold); transform: translateX(-101%);
+    transition: transform 0.4s cubic-bezier(0.25,0.46,0.45,0.94);
+  }
+  .reservation-cta:hover { color: var(--deep); }
+  .reservation-cta:hover::before { transform: translateX(0); }
+  .reservation-cta span { position: relative; z-index: 1; }
+
+  /* Stylized map */
+  .map-visual {
+    position: relative; height: 450px;
+    background: linear-gradient(135deg, #0B1A2E, #1a2a4a);
+    border: 1px solid rgba(201,168,76,0.2);
+    overflow: hidden;
+  }
+  .map-inner { width: 100%; height: 100%; position: relative; }
+
+  /* SVG map of Nice coastline */
+  .map-svg { width: 100%; height: 100%; position: absolute; }
+
+  .map-pin {
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -100%);
+    display: flex; flex-direction: column; align-items: center;
+    animation: pinPulse 2s ease-in-out infinite;
+    cursor: pointer;
+  }
+  .map-pin .pin-dot {
+    width: 16px; height: 16px; border-radius: 50%;
+    background: var(--gold);
+    box-shadow: 0 0 0 0 rgba(201,168,76,0.7);
+    animation: pinRing 2s ease-in-out infinite;
+  }
+  .map-pin .pin-line {
+    width: 2px; height: 30px; background: var(--gold); opacity: 0.6;
+  }
+  .map-pin .pin-label {
+    margin-top: 0.5rem;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.6rem; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--gold);
+    white-space: nowrap;
+    background: rgba(13,10,6,0.8);
+    padding: 0.3rem 0.6rem;
+    border: 1px solid rgba(201,168,76,0.3);
+  }
+  @keyframes pinRing {
+    0% { box-shadow: 0 0 0 0 rgba(201,168,76,0.7); }
+    70% { box-shadow: 0 0 0 20px rgba(201,168,76,0); }
+    100% { box-shadow: 0 0 0 0 rgba(201,168,76,0); }
+  }
+  @keyframes pinPulse {
+    0%,100%{transform:translate(-50%,-100%) translateY(0);}
+    50%{transform:translate(-50%,-100%) translateY(-5px);}
+  }
+
+  /* ── GALLERY STRIP ── */
+  #gallery {
+    overflow: hidden; padding: 4rem 0;
+    background: var(--deep);
+  }
+  .gallery-track {
+    display: flex; gap: 1.5rem;
+    animation: galleryScroll 30s linear infinite;
+    width: max-content;
+  }
+  .gallery-track:hover { animation-play-state: paused; }
+  @keyframes galleryScroll {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+  .gallery-item {
+    width: 280px; height: 200px; flex-shrink: 0;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(201,168,76,0.1);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 4rem; position: relative; overflow: hidden;
+    transition: all 0.4s;
+  }
+  .gallery-item img {
+    width: 100%; height: 100%; object-fit: cover; display: block;
+    transition: transform 0.4s ease, filter 0.4s ease;
+  }
+  .gallery-item:hover img { transform: scale(1.04); filter: contrast(1.02) saturate(1.05); }
+  .gallery-item:hover { border-color: var(--gold); }
+  .gallery-item .caption {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    background: linear-gradient(0deg, rgba(13,10,6,0.9), transparent);
+    padding: 1.5rem 1rem 0.75rem;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.6rem; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--gold-light);
+    transform: translateY(100%); transition: transform 0.4s;
+  }
+  .gallery-item:hover .caption { transform: translateY(0); }
+
+  /* ── FOOTER ── */
+  footer {
+    background: #080604; padding: 4rem 2rem 2rem;
+    text-align: center; position: relative; z-index: 10;
+  }
+  .footer-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5rem; font-weight: 900;
+    color: var(--gold); letter-spacing: 0.05em;
+    margin-bottom: 0.5rem;
+  }
+  .footer-tagline {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic; color: var(--gold-light);
+    font-size: 1rem; margin-bottom: 2rem;
+  }
+  .footer-links {
+    display: flex; gap: 2rem; justify-content: center;
+    flex-wrap: wrap; margin-bottom: 3rem;
+  }
+  .footer-links a {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.6rem; letter-spacing: 0.3em;
+    text-transform: uppercase; color: var(--gold-light);
+    text-decoration: none; opacity: 0.6;
+    transition: opacity 0.3s;
+  }
+  .footer-links a:hover { opacity: 1; color: var(--gold); }
+  .footer-divider {
+    width: 100%; height: 1px; margin-bottom: 2rem;
+    background: linear-gradient(90deg, transparent, rgba(201,168,76,0.3), transparent);
+  }
+  .footer-copy {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.6rem; letter-spacing: 0.2em;
+    color: rgba(249,244,236,0.25);
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    padding: 1.5rem 3rem;
+    display: flex; align-items: center; justify-content: space-between;
+    transition: background 0.5s;
+  }
+  nav.scrolled {
+    background: rgba(13,10,6,0.95);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(201,168,76,0.1);
+  }
+  .nav-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem; font-weight: 700; color: var(--gold);
+    letter-spacing: 0.05em;
+  }
+  .nav-links {
+    display: flex; gap: 2.5rem; list-style: none;
+  }
+  .nav-links a {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.65rem; letter-spacing: 0.3em;
+    text-transform: uppercase; color: var(--gold-light);
+    text-decoration: none; opacity: 0.7;
+    transition: opacity 0.3s;
+  }
+  .nav-links a:hover { opacity: 1; color: var(--gold); }
+  @media(max-width:700px){
+    .nav-links { display: none; }
+    nav { padding: 1rem 1.5rem; }
+  }
+
+  /* ── UTILITIES ── */
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  .reveal {
+    opacity: 0; transform: translateY(40px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  .reveal.visible { opacity: 1; transform: none; }
+  .reveal-delay-1 { transition-delay: 0.15s; }
+  .reveal-delay-2 { transition-delay: 0.3s; }
+  .reveal-delay-3 { transition-delay: 0.45s; }
+
+  /* Loading screen */
+  #loading {
+    position: fixed; inset: 0; z-index: 9999;
+    background: var(--deep);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 2rem;
+    transition: opacity 1s ease, visibility 1s;
+  }
+  #loading.hidden { opacity: 0; visibility: hidden; }
+  .loading-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 3rem; color: var(--gold);
+    animation: fadeIn 0.5s ease;
+  }
+  .loading-bar-wrap {
+    width: 200px; height: 1px; background: rgba(201,168,76,0.2);
+    overflow: hidden;
+  }
+  .loading-bar {
+    height: 100%; width: 0;
+    background: linear-gradient(90deg, var(--gold-dark), var(--gold));
+    animation: loadBar 1.8s ease forwards;
+  }
+  @keyframes loadBar { to { width: 100%; } }
+</style>
+</head>
+<body>
+
+<!-- Loading -->
+<div id="loading">
+  <div class="loading-logo">La Côte d'Azur</div>
+  <div class="loading-bar-wrap"><div class="loading-bar"></div></div>
+</div>
+
+<!-- Cursor -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursor-ring"></div>
+
+<!-- Stars canvas -->
+<canvas id="stars-canvas"></canvas>
+
+<!-- NAV -->
+<nav id="nav">
+  <div class="nav-logo">L'Azur</div>
+  <ul class="nav-links">
+    <li><a href="#about">Maison</a></li>
+    <li><a href="#menu">Carte</a></li>
+    <li><a href="#experience">Expérience</a></li>
+    <li><a href="#location">Localisation</a></li>
+    <li><a href="#location" class="reservation-cta" style="font-size:0.55rem;padding:0.6rem 1.2rem;border-color:rgba(201,168,76,0.5)"><span>Réserver</span></a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg-gradient"></div>
+
+  <!-- Floating 3D plates -->
+  <div class="plates-showcase">
+    <!-- Plate 1: Risotto à la Truffe Noire -->
+    <div class="plate-3d">
+      <img class="plate-img" src="./images/sem fundo/1.png" alt="Risotto à la Truffe Noire"/>
+    </div>
+    <!-- Plate 2: Salade Niçoise -->
+    <div class="plate-3d">
+      <img class="plate-img" src="./images/sem fundo/2.png" alt="Salade Niçoise"/>
+    </div>
+    <!-- Plate 3: Foie Gras Poêlé -->
+    <div class="plate-3d">
+      <img class="plate-img" src="./images/sem fundo/3.png" alt="Foie Gras Poêlé"/>
+    </div>
+    <!-- Plate 4: Côte d'Agneau Provençal -->
+    <div class="plate-3d">
+      <img class="plate-img" src="./images/sem fundo/4.png" alt="Côte d'Agneau Provençal"/>
+    </div>
+  </div>
+
+  <div class="hero-content">
+    <div class="hero-eyebrow">Restaurant Gastronomique · Depuis 1987</div>
+    <h1 class="hero-title">
+      La Côte<br><em>d'Azur</em>
+    </h1>
+    <div class="hero-divider"></div>
+    <p class="hero-subtitle">
+      Où la Méditerranée rencontre l'excellence culinaire
+    </p>
+    <div class="hero-location">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
+        <circle cx="12" cy="9" r="2.5"/>
+      </svg>
+      <span>2 Promenade des Anglais · Nice, Côte d'Azur</span>
+    </div>
+  </div>
+
+  <!-- Sea waves -->
+  <svg class="sea-wave" viewBox="0 0 1920 120" preserveAspectRatio="none">
+    <path d="M0,60 C200,20 400,80 600,50 C800,20 1000,70 1200,45 C1400,20 1600,65 1920,40 L1920,120 L0,120 Z" fill="#0066CC"/>
+    <path d="M0,80 C250,45 500,90 750,65 C1000,40 1250,85 1500,60 C1700,40 1850,70 1920,55 L1920,120 L0,120 Z" fill="#004a99"/>
+    <path d="M0,95 C300,70 600,100 900,80 C1200,60 1500,95 1920,75 L1920,120 L0,120 Z" fill="#003380"/>
+  </svg>
+
+  <div class="scroll-hint">Défiler</div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-visual reveal">
+    <div class="scene-3d">
+      <div class="scene-inner">
+        <img class="about-dish-img" src="./images/sem fundo/5.png" alt="Burrata di Puglia"/>
+      </div>
+    </div>
+  </div>
+  <div class="about-text">
+    <div class="section-label reveal">Notre Histoire</div>
+    <h2 class="section-title reveal reveal-delay-1">Une passion<br><em style="font-style:italic;color:var(--gold);">méditerranéenne</em></h2>
+    <p class="reveal reveal-delay-2">
+      Fondé en 1987 sur la Promenade des Anglais, La Côte d'Azur incarne l'âme culinaire de Nice — cette ville où le soleil dore les toits en terre cuite et où la mer turquoise inspire chaque création.
+    </p>
+    <div class="quote reveal reveal-delay-2">
+      «&thinsp;La cuisine niçoise est une conversation entre la terre et la mer, un dialogue intime entre les herbes de Provence et les fruits de la Méditerranée.&thinsp;»
+    </div>
+    <p class="reveal reveal-delay-3">
+      Chaque plat est une ode au terroir local : les légumes provençaux des marchés du Cours Saleya, les poissons fraîchement pêchés du golfe de la Napoléon, les vins des coteaux d'Antibes.
+    </p>
+    <div class="chef-signature reveal reveal-delay-3">
+      <div class="chef-avatar">👨‍🍳</div>
+      <div class="chef-info">
+        <span>Chef Jean-Marc Falcone</span>
+        <span>Meilleur Ouvrier de France · 2 Étoiles Michelin</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY STRIP -->
+<div id="gallery">
+  <div class="gallery-track" id="gallery-track"></div>
+</div>
+
+<!-- MENU -->
+<section id="menu">
+  <div class="menu-inner">
+    <div class="menu-header reveal">
+      <div class="section-label" style="justify-content:center;">La Carte</div>
+      <h2 class="section-title">Notre Menu</h2>
+      <p style="color:rgba(249,244,236,0.5);font-style:italic;margin-top:0.5rem;">Inspiré des saisons · Produits locaux · Créativité provençale</p>
+    </div>
+
+    <div class="menu-tabs">
+      <button class="tab-btn active" data-cat="all" onclick="filterMenu('all',this)"><span>Tout</span></button>
+      <button class="tab-btn" data-cat="entrees" onclick="filterMenu('entrees',this)"><span>Entrées</span></button>
+      <button class="tab-btn" data-cat="plats" onclick="filterMenu('plats',this)"><span>Plats</span></button>
+      <button class="tab-btn" data-cat="desserts" onclick="filterMenu('desserts',this)"><span>Desserts</span></button>
+      <button class="tab-btn" data-cat="vins" onclick="filterMenu('vins',this)"><span>Vins</span></button>
+    </div>
+
+    <div class="menu-grid" id="menu-grid"></div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="experience-inner">
+    <div style="text-align:center;margin-bottom:1rem" class="reveal">
+      <div class="section-label" style="justify-content:center;">L'Expérience</div>
+      <h2 class="section-title">Vivre l'Azur</h2>
+    </div>
+    <div class="experience-grid">
+      <div class="exp-cell reveal">
+        <span class="exp-icon">🌊</span>
+        <div class="exp-number">180°</div>
+        <div class="exp-label">Vue Panoramique</div>
+        <p class="exp-desc">Une salle entièrement vitrée sur la Baie des Anges, face à la Méditerranée infinie.</p>
+      </div>
+      <div class="exp-cell reveal reveal-delay-1">
+        <span class="exp-icon">⭐</span>
+        <div class="exp-number">2</div>
+        <div class="exp-label">Étoiles Michelin</div>
+        <p class="exp-desc">Récompensé depuis 2009 pour l'excellence absolue de notre cuisine provençale revisitée.</p>
+      </div>
+      <div class="exp-cell reveal reveal-delay-2">
+        <span class="exp-icon">🍷</span>
+        <div class="exp-number">800+</div>
+        <div class="exp-label">Références de Vins</div>
+        <p class="exp-desc">Une cave exceptionnelle : Côtes de Provence, Bandol, Bellet — et les grands crus du monde.</p>
+      </div>
+    </div>
+    <div class="experience-grid" style="margin-top:1px;">
+      <div class="exp-cell reveal">
+        <span class="exp-icon">🌿</span>
+        <div class="exp-number">100%</div>
+        <div class="exp-label">Produits Locaux</div>
+        <p class="exp-desc">Partenaires directs avec les producteurs du Marché du Cours Saleya chaque matin.</p>
+      </div>
+      <div class="exp-cell reveal reveal-delay-1">
+        <span class="exp-icon">🎵</span>
+        <div class="exp-number">Jazz</div>
+        <div class="exp-label">Tous les Vendredis</div>
+        <p class="exp-desc">Soirées jazz live avec les meilleurs musiciens de la Côte d'Azur.</p>
+      </div>
+      <div class="exp-cell reveal reveal-delay-2">
+        <span class="exp-icon">🏖️</span>
+        <div class="exp-number">Terrasse</div>
+        <div class="exp-label">Face à la Mer</div>
+        <p class="exp-desc">Dîner sous les étoiles avec le doux bruit des vagues en fond sonore inoubliable.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LOCATION -->
+<section id="location">
+  <div class="location-inner">
+    <div>
+      <div class="section-label reveal">Nous Trouver</div>
+      <h2 class="section-title reveal">Nice,<br><em style="font-style:italic;color:var(--gold)">Côte d'Azur</em></h2>
+
+      <div class="info-line reveal reveal-delay-1">
+        <span class="icon">📍</span>
+        <div class="content">
+          <span>Adresse</span>
+          <span>2 Promenade des Anglais<br>06000 Nice, France</span>
+        </div>
+      </div>
+      <div class="info-line reveal reveal-delay-1">
+        <span class="icon">🕐</span>
+        <div class="content">
+          <span>Horaires</span>
+          <span>Mardi – Dimanche<br>Déjeuner 12h–14h30 · Dîner 19h–22h30</span>
+        </div>
+      </div>
+      <div class="info-line reveal reveal-delay-2">
+        <span class="icon">📞</span>
+        <div class="content">
+          <span>Réservations</span>
+          <span>+33 (0)4 93 12 34 56</span>
+        </div>
+      </div>
+      <div class="info-line reveal reveal-delay-2">
+        <span class="icon">✉️</span>
+        <div class="content">
+          <span>Email</span>
+          <span>reservation@lacoteazur-nice.fr</span>
+        </div>
+      </div>
+      <div class="info-line reveal reveal-delay-3">
+        <span class="icon">🚖</span>
+        <div class="content">
+          <span>Accès</span>
+          <span>Tram ligne 2 : Albert 1er<br>Parking Masséna à 200m</span>
+        </div>
+      </div>
+
+      <a href="#" class="reservation-cta reveal reveal-delay-3"><span>Réserver une Table</span></a>
+    </div>
+
+    <div class="map-visual reveal reveal-delay-2">
+      <svg class="map-svg" viewBox="0 0 600 450" fill="none">
+        <!-- Sea -->
+        <rect width="600" height="450" fill="#0B1A2E"/>
+        <!-- Sea gradient -->
+        <defs>
+          <linearGradient id="seaGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#0066CC" stop-opacity="0.6"/>
+            <stop offset="100%" stop-color="#003380" stop-opacity="0.3"/>
+          </linearGradient>
+          <linearGradient id="landGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#1a2a1a"/>
+            <stop offset="100%" stop-color="#0a1a0a"/>
+          </linearGradient>
+        </defs>
+        <!-- Sea -->
+        <path d="M0,220 Q150,200 300,215 Q450,230 600,210 L600,450 L0,450 Z" fill="url(#seaGrad)"/>
+        <!-- Land -->
+        <path d="M0,0 L600,0 L600,220 Q450,230 300,215 Q150,200 0,220 Z" fill="url(#landGrad)"/>
+        <!-- Promenade des Anglais line -->
+        <path d="M30,218 Q200,210 400,215 L570,212" stroke="#C9A84C" stroke-width="3" opacity="0.8" stroke-linecap="round"/>
+        <text x="200" y="205" font-size="8" fill="#C9A84C" font-family="monospace" opacity="0.6" letter-spacing="2">PROMENADE DES ANGLAIS</text>
+        <!-- Streets -->
+        <path d="M100,210 L100,80" stroke="rgba(201,168,76,0.2)" stroke-width="1.5"/>
+        <path d="M200,215 L200,60" stroke="rgba(201,168,76,0.2)" stroke-width="1.5"/>
+        <path d="M300,215 L300,50" stroke="rgba(201,168,76,0.2)" stroke-width="1.5"/>
+        <path d="M400,215 L400,70" stroke="rgba(201,168,76,0.2)" stroke-width="1.5"/>
+        <path d="M30,150 L570,150" stroke="rgba(201,168,76,0.15)" stroke-width="1"/>
+        <path d="M30,110 L570,110" stroke="rgba(201,168,76,0.1)" stroke-width="1"/>
+        <!-- Nice text -->
+        <text x="30" y="140" font-size="22" font-family="serif" fill="rgba(201,168,76,0.15)" font-style="italic">NICE</text>
+        <!-- Wave lines -->
+        <path d="M50,260 Q150,250 250,260 Q350,270 450,260 Q530,252 580,258" stroke="rgba(0,102,204,0.3)" stroke-width="1" fill="none"/>
+        <path d="M30,290 Q130,280 230,290 Q330,300 430,288 Q530,278 590,284" stroke="rgba(0,102,204,0.2)" stroke-width="1" fill="none"/>
+        <path d="M20,320 Q120,310 230,320 Q340,330 460,315 Q540,306 600,312" stroke="rgba(0,102,204,0.15)" stroke-width="1" fill="none"/>
+        <!-- Collines de Nice in background -->
+        <path d="M0,120 Q80,80 160,100 Q200,65 260,90 Q310,50 360,80 Q420,40 480,70 Q540,50 600,80 L600,0 L0,0 Z" fill="rgba(40,60,30,0.4)"/>
+        <!-- Restaurant pin area -->
+        <circle cx="295" cy="213" r="20" fill="rgba(201,168,76,0.1)" stroke="rgba(201,168,76,0.4)" stroke-width="1"/>
+        <circle cx="295" cy="213" r="6" fill="#C9A84C"/>
+        <line x1="295" y1="207" x2="295" y2="185" stroke="#C9A84C" stroke-width="1.5"/>
+        <rect x="250" y="170" width="90" height="20" rx="2" fill="rgba(13,10,6,0.85)" stroke="rgba(201,168,76,0.4)" stroke-width="0.5"/>
+        <text x="295" y="183" text-anchor="middle" font-size="7" fill="#C9A84C" font-family="monospace" letter-spacing="1">LA CÔTE D'AZUR</text>
+        <!-- Compass -->
+        <g transform="translate(560,40)">
+          <circle r="20" fill="rgba(13,10,6,0.6)" stroke="rgba(201,168,76,0.3)" stroke-width="0.5"/>
+          <path d="M0,-15 L5,8 L0,4 L-5,8 Z" fill="#C9A84C" opacity="0.9"/>
+          <path d="M0,15 L5,-8 L0,-4 L-5,-8 Z" fill="rgba(201,168,76,0.3)"/>
+          <text x="0" y="-18" text-anchor="middle" font-size="7" fill="#C9A84C">N</text>
+        </g>
+      </svg>
+      <div class="map-pin" style="top:48%;left:49%;">
+        <div class="pin-dot"></div>
+        <div class="pin-line"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">L'Azur</div>
+  <p class="footer-tagline">Là où la Méditerranée se met à table</p>
+  <div class="footer-links">
+    <a href="#">Menu</a>
+    <a href="#">Réservations</a>
+    <a href="#">Événements</a>
+    <a href="#">La Carte des Vins</a>
+    <a href="#">Chef Jean-Marc</a>
+    <a href="#">Contact</a>
+    <a href="#">Instagram</a>
+  </div>
+  <div class="footer-divider"></div>
+  <p class="footer-copy">© 2024 La Côte d'Azur · 2 Promenade des Anglais, Nice · Tous droits réservés</p>
+</footer>
+
+<script>
+// ── CURSOR ──────────────────────────────────────
+const cursor = document.getElementById('cursor');
+const ring = document.getElementById('cursor-ring');
+let mx = 0, my = 0, rx = 0, ry = 0;
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  cursor.style.left = mx + 'px'; cursor.style.top = my + 'px';
+});
+function animRing() {
+  rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12;
+  ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+  requestAnimationFrame(animRing);
+}
+animRing();
+document.querySelectorAll('a,button,.menu-card').forEach(el => {
+  el.addEventListener('mouseenter', () => { cursor.style.transform = 'translate(-50%,-50%) scale(2.5)'; ring.style.width = '60px'; ring.style.height = '60px'; });
+  el.addEventListener('mouseleave', () => { cursor.style.transform = 'translate(-50%,-50%) scale(1)'; ring.style.width = '40px'; ring.style.height = '40px'; });
+});
+
+// ── STARS ───────────────────────────────────────
+const canvas = document.getElementById('stars-canvas');
+const ctx = canvas.getContext('2d');
+let stars = [];
+function initStars() {
+  canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+  stars = [];
+  for (let i = 0; i < 200; i++) {
+    stars.push({ x: Math.random() * canvas.width, y: Math.random() * canvas.height, r: Math.random() * 1.5, speed: Math.random() * 0.3 + 0.1, opacity: Math.random() });
+  }
+}
+function drawStars() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  stars.forEach(s => {
+    s.opacity += (Math.random() - 0.5) * 0.05;
+    s.opacity = Math.max(0.1, Math.min(1, s.opacity));
+    ctx.beginPath();
+    ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(255, 240, 200, ${s.opacity})`;
+    ctx.fill();
+  });
+  requestAnimationFrame(drawStars);
+}
+window.addEventListener('resize', initStars);
+initStars(); drawStars();
+
+// ── NAV SCROLL ──────────────────────────────────
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 80);
+});
+
+// ── REVEAL ON SCROLL ────────────────────────────
+const revealEls = document.querySelectorAll('.reveal');
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+}, { threshold: 0.12 });
+revealEls.forEach(el => obs.observe(el));
+
+// ── LOADING ─────────────────────────────────────
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    document.getElementById('loading').classList.add('hidden');
+  }, 2000);
+});
+
+// ── MENU DATA ───────────────────────────────────
+const menuItems = [
+  { cat: 'entrees', name: 'Salade Niçoise', desc: 'Thon albacore, olives de Nice, anchois, haricots verts, tomates cerises, œuf mollet, vinaigrette niçoise au citron.', price: '28', badge: 'Signature', image: './images/Menu/Ultra-professional_fine_dining_202604281205.jpeg', allergens: ['gluten','dairy'] },
+  { cat: 'entrees', name: 'Socca Dorée', desc: 'Crêpe de pois chiches grillée, fleur de sel, poivre noir, huile d\'olive extra-vierge AOC Nice.', price: '18', badge: 'Vegan', image: './images/Menu/High-end_food_photography_202604281218.jpeg', allergens: [] },
+  { cat: 'entrees', name: 'Pissaladière', desc: 'Tarte fine oignons confits, anchois, olives tapenade, thym frais, pâte feuilletée maison.', price: '22', badge: 'Local', image: './images/Menu/Professional_gourmet_photography_202604281218.jpeg', allergens: ['gluten','shellfish'] },
+  { cat: 'entrees', name: 'Soupe de Pistou', desc: 'Soupe de légumes provençaux, pistou de basilic frais, copeaux de parmesan 24 mois, croûtons ail.', price: '19', badge: 'Végétarien', image: './images/Menu/Exquisite_professional_food_202604281219.jpeg', allergens: ['dairy','gluten'] },
+  { cat: 'plats', name: 'Bouillabaisse Royale', desc: 'Saint-Pierre, rouget, langoustines, palourdes, saffran de Provence, rouille aïoli, croutons grillés.', price: '68', badge: 'Chef', image: './images/Menu/Stunning_professional_food_202604281219.jpeg', allergens: ['shellfish','gluten'] },
+  { cat: 'plats', name: 'Daurade à la Plancha', desc: 'Daurade royale de Méditerranée, légumes du soleil rôtis, jus au romarin, huile d\'olive de Grasse.', price: '48', badge: 'Saison', image: './images/Menu/Premium_fine_dining_202604281219.jpeg', allergens: ['shellfish'] },
+  { cat: 'plats', name: 'Côte d\'Agneau Provençal', desc: 'Agneau de Sisteron, gratin dauphinois, jus aux herbes de Provence, légumes confits, fleur de thym.', price: '52', badge: 'Prestige', image: './images/Menu/Luxurious_food_photography_202604281219.jpeg', allergens: ['dairy'] },
+  { cat: 'plats', name: 'Risotto aux Truffes', desc: 'Carnaroli Acquerello, truffe noire du Périgord, parmesan Reggiano, beurre de Normandie, ciboulette.', price: '44', badge: 'Végétarien', image: './images/Menu/Exquisite_fine_dining_202604281219.jpeg', allergens: ['dairy','gluten'] },
+  { cat: 'desserts', name: 'Tarte Tropézienne', desc: 'Brioche moelleuse, crème légère vanille-fleur d\'oranger, sucre perle, recette originale Saint-Tropez.', price: '18', badge: 'Maison', image: './images/Menu/Exquisite_professional_food_202604281219.jpeg', allergens: ['gluten','dairy'] },
+  { cat: 'desserts', name: 'Mousse au Citron de Menton', desc: 'Mousse aérienne citron AOP Menton, meringue italienne, tuile croustillante, gelée agrumes, menthe.', price: '16', badge: 'Légèreté', image: './images/Menu/Stunning_fine_dining_202604281220.jpeg', allergens: ['dairy','gluten'] },
+  { cat: 'desserts', name: 'Soufflé Grand Marnier', desc: 'Soufflé chaud à la liqueur d\'orange, crème glacée vanille Bourbon, dentelle croustillante au cacao.', price: '22', badge: 'Chaud', image: './images/Menu/Dramatic,_luxurious_food_202604281220.jpeg', allergens: ['dairy','gluten','nuts'] },
+  { cat: 'vins', name: 'Château de Bellet Blanc', desc: 'AOC Bellet · Rolle, Chardonnay · Notes de pêche blanche, fleur d\'acacia, minéralité calcaire.', price: '85', badge: 'Local AOP', image: './images/Menu/Premium_wine_bottle_202604281224.jpeg', allergens: [] },
+  { cat: 'vins', name: 'Bandol Rouge Domaine Ott', desc: 'AOC Bandol · Mourvèdre, Grenache · Tanins veloutés, fruits noirs, garrigue, longue persistance.', price: '120', badge: 'Grand Cru', image: './images/Menu/Luxurious_wine_bottle_202604281220.jpeg', allergens: [] },
+  { cat: 'vins', name: 'Côtes de Provence Rosé', desc: 'AOC Côtes de Provence · Grenache, Cinsault · Frais, floral, notes de fraise, accord parfait mer.', price: '58', badge: 'Été', image: './images/Menu/Beautiful,_refreshing_wine_202604281220.jpeg', allergens: [] },
+  { cat: 'vins', name: 'Champagne Krug Grande Cuvée', desc: 'Maison Krug · Chardonnay, Pinot Noir, Meunier · Complexité infinie, bulle fine, 20 ans de cave.', price: '280', badge: 'Prestige', image: './images/Menu/Prestigious_champagne_bottle_202604281220.jpeg', allergens: [] },
+];
+
+function buildMenuCard(item) {
+  const allergenDots = item.allergens.map(a => `<div class="allergen-dot ${a}" title="${a}"></div>`).join('');
+  const imageHTML = item.image 
+    ? `<img src="${item.image}" alt="${item.name}" style="width:100%;height:100%;object-fit:cover;border-radius:8px;"/>`
+    : `<div class="food-anim" style="font-size:100px;text-align:center;line-height:160px;">${item.emoji}</div>`;
+  return `
+    <div class="menu-card visible" data-cat="${item.cat}">
+      <div class="card-food-visual">
+        ${imageHTML}
+      </div>
+      <div class="card-category">${item.cat === 'entrees' ? 'Entrée' : item.cat === 'plats' ? 'Plat Principal' : item.cat === 'desserts' ? 'Dessert' : 'Vins & Champagnes'}</div>
+      <div class="card-name">${item.name}</div>
+      <div class="card-desc">${item.desc}</div>
+      <div class="card-footer">
+        <div class="card-price">${item.cat === 'vins' ? '' : ''}${item.price}€</div>
+        <div class="card-badge">${item.badge}</div>
+      </div>
+      ${allergenDots ? `<div class="allergen-dots">${allergenDots}</div>` : ''}
+    </div>`;
+}
+
+document.getElementById('menu-grid').innerHTML = menuItems.map(buildMenuCard).join('');
+
+function filterMenu(cat, btn) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.menu-card').forEach(card => {
+    const show = cat === 'all' || card.dataset.cat === cat;
+    card.classList.toggle('visible', show);
+    card.style.animation = show ? 'fadeInUp 0.5s ease both' : '';
+  });
+}
+
+// ── GALLERY ─────────────────────────────────────
+const galleryItems = [
+  { image: './images/Galerry/Breathtaking_landscape_photography_202604281259.jpeg', label: 'Vue Méditerranée' },
+  { image: './images/Galerry/Professional_fine_dining_202604281249.jpeg', label: 'Bouillabaisse' },
+  { image: './images/Galerry/Beautiful,_artistic_food_202604281258.jpeg', label: 'Herbes de Provence' },
+  { image: './images/Galerry/Luxurious_wine_cellar_202604281258.jpeg', label: 'Cave à Vins' },
+  { image: './images/Galerry/Stunning_restaurant_terrace_202604281258.jpeg', label: 'Terrasse' },
+  { image: './images/Galerry/Professional_gourmet_close-up_202604281258.jpeg', label: 'Socca Dorée' },
+  { image: './images/Galerry/Professional_event_photography_202604281259.jpeg', label: 'Jazz Vendredis' },
+  { image: './images/Galerry/Ultra-professional_luxury_travel_202604281257.jpeg', label: 'Coucher de Soleil' },
+];
+const track = document.getElementById('gallery-track');
+const doubled = [...galleryItems, ...galleryItems];
+track.innerHTML = doubled.map(g => `
+  <div class="gallery-item">
+    <img src="${g.image}" alt="${g.label}" loading="lazy"/>
+    <div class="caption">${g.label}</div>
+  </div>
+`).join('');
+
+// ── PARALLAX PLATES ─────────────────────────────
+document.addEventListener('mousemove', e => {
+  const cx = window.innerWidth / 2, cy = window.innerHeight / 2;
+  const dx = (e.clientX - cx) / cx, dy = (e.clientY - cy) / cy;
+  document.querySelectorAll('.plate-3d').forEach((p, i) => {
+    const factor = (i + 1) * 8;
+    p.style.transform = `translate(${dx * factor}px, ${dy * factor}px)`;
+  });
+});
+</script>
+</body>
+</html>
